@@ -8,9 +8,9 @@ import com.yly.apollo.engine.utils.JSONUtils;
 
 import java.util.Map;
 
-public class StandardHeadHandler extends AbstractHandler<Object> {
+public class StandardHeadHandler extends AbstractHandler {
     @Override
-    public void handle(HandlerContext<Object> hc) {
+    public <I>  void handle(HandlerContext<I> hc) {
         final Object innerParam = hc.getInnerParam();
         Buf buf = new MapBuf();
         if (innerParam instanceof Map) {

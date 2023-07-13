@@ -5,10 +5,10 @@ import com.yly.apollo.engine.api.HandlerContext;
 import com.yly.apollo.engine.handlers.AbstractHandler;
 
 
-public class ApplyIdempotentHandler extends AbstractHandler<ApplyIdempotentDTO> {
+public class ApplyIdempotentHandler extends AbstractHandler {
 
     @Override
-    public void handle(HandlerContext<ApplyIdempotentDTO> hc) {
+    public <I> void handle(HandlerContext<I> hc) {
         Object object= hc.getInnerParam() ;
         System.out.println("ApplyIdempotentHandler 被执行了");
     }

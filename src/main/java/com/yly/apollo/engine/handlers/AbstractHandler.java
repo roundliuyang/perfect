@@ -11,11 +11,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-public abstract class AbstractHandler<I> implements Handler<I> {
+public abstract class AbstractHandler implements Handler {
     public AbstractHandler() {
     }
 
-    public void genInnerParam(HandlerContext<I> hc) {
+    public <I> void genInnerParam(HandlerContext<I> hc) {
         if (null == hc.getInnerParam()) {
             Map<String, Object> buf = hc.getEngine().getBuf().getContext();
             String className = hc.getEngineInfo().getHandlerInfo().getHandlerClass();

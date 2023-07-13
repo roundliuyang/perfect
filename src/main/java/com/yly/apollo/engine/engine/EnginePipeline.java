@@ -10,22 +10,21 @@ import com.yly.apollo.engine.context.DefaultHandlerContext;
 import com.yly.apollo.engine.context.TailContext;
 import com.yly.apollo.engine.handlers.TailHandler;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class EnginePipeline<I, O> extends AbstractHandlerContext<I> implements HandlerContext<I> {
-    private HandlerContext[] handlerContexts;
+    private HandlerContext<?>[] handlerContexts;
 
     private final TailHandler tailHandler;
 
-    private TailContext<O> tail;
+    private TailContext tail;
 
     /**
      * 引擎管道中的缓冲区上下文
      */
     private Buf buf;
 
-    public EnginePipeline(Handler<I> headHandler, TailHandler tailHandler) {
+    public EnginePipeline(Handler headHandler, TailHandler tailHandler) {
         this.handler = headHandler;
         this.tailHandler = tailHandler;
     }
@@ -35,13 +34,14 @@ public class EnginePipeline<I, O> extends AbstractHandlerContext<I> implements H
         this.fillHandlerContexts(engineInfos.size() + 2);
         this.setNext(this.handlerContexts[1]);
         int order = 1;
-        Iterator var3 = engineInfos.iterator();
-        while (var3.hasNext()) {
-            EngineInfo engineInfo = (EngineInfo) var3.next();
+        for (EngineInfo engineInfo : engineInfos) {
             engineInfo.build();
             String name = engineInfo.getName();
             Handler handler = HandlerManager.getHandler(name);
-            this.handlerContexts[order].setHandler(handler).setEngineInfo(engineInfo).setNext(this.handlerContexts[order++ + 1]);
+            this.handlerContexts[order]
+                    .setHandler(handler)
+                    .setEngineInfo(engineInfo)
+                    .setNext(this.handlerContexts[order++ + 1]);
         }
         return this;
     }
@@ -51,7 +51,7 @@ public class EnginePipeline<I, O> extends AbstractHandlerContext<I> implements H
         this.handlerContexts[0] = this;
 
         for (int i = 1; i < length - 1; ++i) {
-            this.handlerContexts[i] = new DefaultHandlerContext(this);
+            this.handlerContexts[i] = new DefaultHandlerContext<>(this);
         }
 
         this.tail = new TailContext(this, this.tailHandler);
@@ -64,7 +64,7 @@ public class EnginePipeline<I, O> extends AbstractHandlerContext<I> implements H
         this.invokeHandler();
     }
 
-    public TailContext<O> getLast() {
+    public TailContext getLast() {
         return this.tail;
     }
 
@@ -81,7 +81,7 @@ public class EnginePipeline<I, O> extends AbstractHandlerContext<I> implements H
         return this;
     }
 
-    public HandlerContext[] getHandlerContexts() {
+    public HandlerContext<?>[] getHandlerContexts() {
         return this.handlerContexts;
     }
 

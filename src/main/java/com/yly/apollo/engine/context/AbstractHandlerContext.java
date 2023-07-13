@@ -17,7 +17,7 @@ import com.yly.apollo.engine.engine.EnginePipeline;
 public abstract class AbstractHandlerContext<I> implements HandlerContext<I> {
     protected EngineInfo engineInfo;
     protected volatile HandlerContext<?> next;
-    protected Handler<I> handler;
+    protected Handler handler;
     protected I innerParam;
     protected HandleResult handleResult;
     protected Boolean isNext;
@@ -55,11 +55,11 @@ public abstract class AbstractHandlerContext<I> implements HandlerContext<I> {
         return this;
     }
 
-    public Handler<I> getHandler() {
+    public Handler getHandler() {
         return handler;
     }
 
-    public HandlerContext<I> setHandler(Handler<I> handler) {
+    public HandlerContext<I> setHandler(Handler handler) {
         this.handler = handler;
         return this;
     }
@@ -70,12 +70,10 @@ public abstract class AbstractHandlerContext<I> implements HandlerContext<I> {
         } else {
             if (null != this.getOrder()) {
                 EnginePipeline<?, ?> engine = this.getEngine();
-                HandlerContext[] handlerContexts = engine.getHandlerContexts();
-                HandlerContext[] handlerContextList = handlerContexts;
+                HandlerContext<?>[] handlerContexts = engine.getHandlerContexts();
                 int length = handlerContexts.length;
 
-                for (int i = 0; i < length; ++i) {
-                    HandlerContext hc = handlerContextList[i];
+                for (HandlerContext<?> hc : handlerContexts) {
                     if (this.getOrder().equals(hc.getEngineInfo().getOrder())) {
                         hc.invokeCurrentHandler();
                         hc.getNext().invokeHandler();
@@ -100,11 +98,6 @@ public abstract class AbstractHandlerContext<I> implements HandlerContext<I> {
         this.handler.genInnerParam(this);
         this.handler.handle(this);
         return Instruction.CONTINUE;
-//        if (!this.isNext) {
-//            return Instruction.BREAK;
-//        } else {
-//            return Instruction.BREAK;
-//        }
     }
 
     public abstract Buf getBuf();

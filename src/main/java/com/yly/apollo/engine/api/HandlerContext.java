@@ -18,7 +18,6 @@ public interface HandlerContext<I> {
 
     /**
      * 设置内部参数的方法
-     * @param var1
      */
     void setInnerParam(I var1);
 
@@ -35,7 +34,7 @@ public interface HandlerContext<I> {
     /**
      * 设置处理器（Handler）的方法，并返回设置后的处理上下文
      */
-    HandlerContext<I> setHandler(Handler<I> var1);
+    HandlerContext<I> setHandler(Handler var1);
 
     /**
      * 设置引擎信息（EngineInfo）的方法，并返回设置后的处理上下文
@@ -77,7 +76,6 @@ public interface HandlerContext<I> {
     }
 
     Buf getBuf();
-
 
 
 }
