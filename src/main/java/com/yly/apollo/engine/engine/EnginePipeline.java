@@ -81,4 +81,8 @@ public class EnginePipeline<I, O> extends AbstractHandlerContext<I> implements H
         return this;
     }
 
+    public HandlerContext[] getHandlerContexts() {
+        return this.handlerContexts;
+    }
+
 }

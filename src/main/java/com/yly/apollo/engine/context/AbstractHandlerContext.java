@@ -18,7 +18,6 @@ public abstract class AbstractHandlerContext<I> implements HandlerContext<I> {
     protected EngineInfo engineInfo;
     protected volatile HandlerContext<?> next;
     protected Handler<I> handler;
-    private HandlerContext[] handlerContexts;
     protected I innerParam;
     protected HandleResult handleResult;
     protected Boolean isNext;
@@ -88,9 +87,6 @@ public abstract class AbstractHandlerContext<I> implements HandlerContext<I> {
     }
 
 
-    public HandlerContext[] getHandlerContexts() {
-        return this.handlerContexts;
-    }
 
     public HandlerContext<?> getLast() {
         return this.next.getLast();
