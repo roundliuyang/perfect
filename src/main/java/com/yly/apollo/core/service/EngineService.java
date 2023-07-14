@@ -17,10 +17,10 @@ public class EngineService {
      * 处理ONS消息 ,假设接受消息的handler 调用此方法
      */
     public String invokeOns(String onsMessage, ApolloApiEnum onsType) throws Exception {
-        return doInvokeOns(onsMessage, onsType, new EnginePipeline(new StandardHeadHandler(), new StandardTailHandler()));
+        return doInvokeOns(onsMessage, onsType, new EnginePipeline<>(new StandardHeadHandler(), new StandardTailHandler()));
     }
 
-    private String doInvokeOns(String strParams, ApolloApiEnum onsType, EnginePipeline pipeline) throws Exception {
+    private String doInvokeOns(String strParams, ApolloApiEnum onsType, EnginePipeline<Object,Object> pipeline) throws Exception {
 
         // 实际上handlerInfos 可以是流程编排，从数据库中查询配置
         ArrayList<EngineInfo> handlerInfos = new ArrayList<>();
@@ -38,8 +38,7 @@ public class EngineService {
         HashMap<Object, Object> params = new HashMap<>();
         params.put(ApolloConstants.API_TYPE, onsType.getApiType());
         params.put(ApolloConstants.API_NAME, onsType.getApiName());
-        EnginePipeline init = pipeline.init(handlerInfos);
-        init.fireHandlers(params);
+        pipeline.init(handlerInfos).fireHandlers(params);
         return "ok";
     }
 

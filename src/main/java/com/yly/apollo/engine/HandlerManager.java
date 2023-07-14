@@ -7,8 +7,8 @@ import com.yly.apollo.engine.api.Handler;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class HandlerManager {
-    private static final ConcurrentHashMap<String, Handler> localhandlerMap = new ConcurrentHashMap();
-    private static final ConcurrentHashMap<String, Class<?>> localDtoClassMap = new ConcurrentHashMap();
+    private static final ConcurrentHashMap<String, Handler<?>> localhandlerMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Class<?>> localDtoClassMap = new ConcurrentHashMap<>();
 
     static {
         ApplyIdempotentHandler applyIdempotentHandler = new ApplyIdempotentHandler();
@@ -16,13 +16,11 @@ public class HandlerManager {
         localDtoClassMap.put("applyIdempotentHandler", ApplyIdempotentDTO.class);
     }
 
-    public static Handler getHandler(String handlerName) {
-        Handler handler = (Handler) localhandlerMap.get(handlerName);
-        return handler;
+    public static Handler<?> getHandler(String handlerName) {
+        return localhandlerMap.get(handlerName);
     }
 
     public static Class<?> getDtoClass(String handlerName) {
-        Class<?> handlerDtoClass = (Class) localDtoClassMap.get(handlerName);
-        return handlerDtoClass;
+        return localDtoClassMap.get(handlerName);
     }
 }
