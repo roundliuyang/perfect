@@ -70,12 +70,12 @@ public abstract class AbstractHandlerContext<I> implements HandlerContext<I> {
         } else {
             if (null != this.getOrder()) {
                 EnginePipeline<?, ?> engine = this.getEngine();
-                HandlerContext[] handlerContexts = engine.getHandlerContexts();
-                HandlerContext[] handlerContextList = handlerContexts;
+                HandlerContext<?>[] handlerContexts = engine.getHandlerContexts();
+                HandlerContext<?>[] handlerContextList = handlerContexts;
                 int length = handlerContexts.length;
 
                 for (int i = 0; i < length; ++i) {
-                    HandlerContext hc = handlerContextList[i];
+                    HandlerContext<?> hc = handlerContextList[i];
                     if (this.getOrder().equals(hc.getEngineInfo().getOrder())) {
                         hc.invokeCurrentHandler();
                         hc.getNext().invokeHandler();
@@ -100,11 +100,6 @@ public abstract class AbstractHandlerContext<I> implements HandlerContext<I> {
         this.handler.genInnerParam(this);
         this.handler.handle(this);
         return Instruction.CONTINUE;
-//        if (!this.isNext) {
-//            return Instruction.BREAK;
-//        } else {
-//            return Instruction.BREAK;
-//        }
     }
 
     public abstract Buf getBuf();
